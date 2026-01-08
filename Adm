@@ -1,0 +1,40 @@
+-- ================================
+-- SPECTRA HUB | EXECUÇÃO ÚNICA REAL
+-- ================================
+
+local genv = getgenv and getgenv() or _G
+
+-- Se já executou, trava tudo
+if genv.__SPECTRA_HUB_RUNNING then
+    warn("[Spectra Hub] Já está em execução. Cancelado.")
+    return
+end
+
+-- Marca como em execução imediatamente
+genv.__SPECTRA_HUB_RUNNING = true
+
+-- URLs dos scripts
+local Script1 = "https://raw.githubusercontent.com/assure157tv157157157-boop/Spectra-HUB-/refs/heads/main/Painel%20ADM%20do%20spectra%20hub"
+local Script2 = "https://raw.githubusercontent.com/assure157tv157157157-boop/Spectra-HUB-/refs/heads/main/Come%C3%A7o%20e%20URL%20do%20Spectra"
+
+-- Função segura de execução
+local function RunScript(url)
+    local ok, err = pcall(function()
+        local src = game:HttpGet(url, true)
+        local fn = loadstring(src)
+        if fn then
+            fn()
+        end
+    end)
+
+    if not ok then
+        warn("[Spectra Hub] Erro ao executar:", err)
+    end
+end
+
+-- Executa EM ORDEM (não paralelo, evita duplicação)
+RunScript(Script1)
+task.wait(0.3)
+RunScript(Script2)
+
+warn("[Spectra Hub] Scripts carregados com sucesso.")
