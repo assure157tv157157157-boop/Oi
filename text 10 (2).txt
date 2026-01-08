@@ -10,7 +10,7 @@ local Workspace = workspace
 --// WHITELIST
 local whitelist = {
     ["doxPkwsXLBt"] = true,
-    [""] = true,
+    ["itz_pedro7229"] = true,
     [""] = true
 }
 
@@ -292,9 +292,9 @@ local ok, WindUILib = pcall(function()
 end)
 if ok and WindUILib then
     local Window = WindUILib:CreateWindow({
-        Title = "ðŸ’«Lcc Hub Painel adminðŸ’«",
+        Title = "SPECTRA Hub admin«",
         Icon =  "star",
-        Author = "by Lcc_027//HOKAGEREI",
+        Author = "by assure_TV",
         Folder = "Lcc Hub Painel admin",
         Size = UDim2.fromOffset(580,460),
         Transparent = true,
