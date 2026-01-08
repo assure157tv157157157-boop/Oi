@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 -- 📦 Coquette Hub — Versão Final com UI Compacta e Todas as Funcionalidades Novas
 
 local Players = game:GetService("Players")
@@ -24,7 +13,7 @@ local LocalPlayer = Players.LocalPlayer
 
 -- 🚨 Configuração de Donos e Moderadores
 local DONOS = {
-    ["luamsempai"] = true,
+    ["itz_pedro7229"] = true,
     ["bobo63363"] = true,
   
 }
