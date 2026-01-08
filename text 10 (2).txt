@@ -1,28 +1,4 @@
---// ServiÃ§os
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local TextChatService = game:GetService("TextChatService")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
-local Workspace = workspace
 
-
---// WHITELIST
-local whitelist = {
-    ["doxPkwsXLBt"] = true,
-    ["itz_pedro7229"] = true,
-    [""] = true
-}
-
-local player = game.Players.LocalPlayer
-
-if not whitelist[player.Name] then
-    player:Kick("Você não está autorizado a usar este script.")
-    return
-end
-
---// Jogadores autorizados por envio de Lcc_####
-local Autorizados = {} -- chave: nome exato do player -> true
 
 --// Estado local
 local playerOriginalSpeed = {}
