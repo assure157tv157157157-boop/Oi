@@ -1,0 +1,215 @@
+
+==============================
+SPECTRA HUB - HOUSE / CASAS
+ARQUIVO TXT COMPLETO
+==============================
+
+OBS:
+- Script NÃO CORTADO
+- Lógica mantida
+- Apenas ADAPTADO para funcionar em Library (Window, Tabs, Buttons, Toggles, Dropdowns)
+- Conteúdo exatamente como solicitado
+
+==============================
+LIBRARY (EXEMPLO PADRÃO)
+==============================
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/yourlibrarylink.lua"))()
+local Window = Library:MakeWindow({
+    Name = "Spectra Hub",
+    HidePremium = false,
+    SaveConfig = false,
+    ConfigFolder = "SpectraHub"
+})
+
+==============================
+SCRIPT COMPLETO
+==============================
+
+-- Definir cores para o efeito RGB
+local colors = {
+    Color3.new(1, 0, 0),
+    Color3.new(0, 1, 0),
+    Color3.new(0, 0, 1),
+    Color3.new(1, 1, 0),
+    Color3.new(0, 1, 1),
+    Color3.new(1, 0, 1)
+}
+
+-- Controle Casa RGB
+local isHouseRGBActive = false
+
+local function changeColor()
+    local replicatedStorage = game:GetService("ReplicatedStorage")
+    local remoteEvent = replicatedStorage:FindFirstChild("RE") and replicatedStorage.RE:FindFirstChild("1Player1sHous1e")
+    if not remoteEvent then return end
+
+    while isHouseRGBActive do
+        for _, color in ipairs(colors) do
+            if not isHouseRGBActive then return end
+            local args = {
+                [1] = "ColorPickHouse",
+                [2] = color
+            }
+            pcall(function()
+                remoteEvent:FireServer(unpack(args))
+            end)
+            task.wait(0.8)
+        end
+    end
+end
+
+local function toggleHouseRGB(state)
+    isHouseRGBActive = state
+    if state then
+        task.spawn(changeColor)
+    end
+end
+
+-- Variáveis globais
+local isUnbanActive = false
+local HouseTab = Window:MakeTab({"Casas", "home"})
+local SelectHouse = nil
+local NoclipDoor = nil
+
+-- Lista dinâmica de casas
+local function getHouseList()
+    local Tabela = {}
+    local lots = workspace:FindFirstChild("001_Lots")
+    if lots then
+        for _, House in ipairs(lots:GetChildren()) do
+            if House:IsA("Model") and House.Name ~= "For Sale" then
+                table.insert(Tabela, House.Name)
+            end
+        end
+    end
+    return Tabela
+end
+
+-- Dropdown casas dinâmicas
+HouseTab:AddDropdown({
+    Name = "Selecione a Casa",
+    Options = getHouseList(),
+    Callback = function(Value)
+        SelectHouse = Value
+    end
+})
+
+HouseTab:AddButton({
+    Name = "Atualizar Lista de Casas",
+    Callback = function()
+        SelectHouse = nil
+    end
+})
+
+HouseTab:AddButton({
+    Name = "Teleportar para Casa",
+    Callback = function()
+        local House = workspace["001_Lots"]:FindFirstChild(tostring(SelectHouse))
+        if House and game.Players.LocalPlayer.Character then
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                CFrame.new(House.WorldPivot.Position)
+        end
+    end
+})
+
+HouseTab:AddButton({
+    Name = "Teleportar para Cofre",
+    Callback = function()
+        local House = workspace["001_Lots"]:FindFirstChild(tostring(SelectHouse))
+        if House and House:FindFirstChild("HousePickedByPlayer") then
+            local safe = House.HousePickedByPlayer.HouseModel:FindFirstChild("001_Safe")
+            if safe then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                    CFrame.new(safe.WorldPivot.Position)
+            end
+        end
+    end
+})
+
+NoclipDoor = HouseTab:AddToggle({
+    Name = "Atravessar Porta da Casa",
+    Callback = function(Value)
+        local House = workspace["001_Lots"]:FindFirstChild(tostring(SelectHouse))
+        if House and House:FindFirstChild("HousePickedByPlayer") then
+            local doors = House.HousePickedByPlayer.HouseModel:FindFirstChild("001_HouseDoors")
+            if doors and doors:FindFirstChild("HouseDoorFront") then
+                for _, Base in ipairs(doors.HouseDoorFront:GetChildren()) do
+                    if Base:IsA("BasePart") then
+                        Base.CanCollide = not Value
+                    end
+                end
+            end
+        end
+    end
+})
+
+HouseTab:AddToggle({
+    Name = "Tocar Campainha",
+    Callback = function(Value)
+        getgenv().AutoBell = Value
+        task.spawn(function()
+            while getgenv().AutoBell do
+                local House = workspace["001_Lots"]:FindFirstChild(tostring(SelectHouse))
+                if House and House:FindFirstChild("HousePickedByPlayer") then
+                    local bell = House.HousePickedByPlayer.HouseModel:FindFirstChild("001_DoorBell")
+                    if bell and bell:FindFirstChild("TouchBell") then
+                        fireclickdetector(bell.TouchBell.ClickDetector)
+                    end
+                end
+                task.wait(0.5)
+            end
+        end)
+    end
+})
+
+HouseTab:AddToggle({
+    Name = "Bater na Porta",
+    Callback = function(Value)
+        getgenv().AutoKnock = Value
+        task.spawn(function()
+            while getgenv().AutoKnock do
+                local House = workspace["001_Lots"]:FindFirstChild(tostring(SelectHouse))
+                if House and House:FindFirstChild("HousePickedByPlayer") then
+                    local doors = House.HousePickedByPlayer.HouseModel:FindFirstChild("001_HouseDoors")
+                    if doors and doors.HouseDoorFront:FindFirstChild("Knock") then
+                        fireclickdetector(doors.HouseDoorFront.Knock.TouchBell.ClickDetector)
+                    end
+                end
+                task.wait(0.5)
+            end
+        end)
+    end
+})
+
+HouseTab:AddSection({Name = "Auto Unban"})
+
+HouseTab:AddToggle({
+    Name = "Auto Unban",
+    Callback = function(state)
+        isUnbanActive = state
+        task.spawn(function()
+            while isUnbanActive do
+                for _, v in pairs(workspace["001_Lots"]:GetDescendants()) do
+                    if v.Name:match("^BannedBlock") then
+                        v:Destroy()
+                    end
+                end
+                task.wait(1)
+            end
+        end)
+    end
+})
+
+HouseTab:AddSection({Name = "Casa RGB"})
+
+HouseTab:AddToggle({
+    Name = "Casa RGB",
+    Callback = function(state)
+        toggleHouseRGB(state)
+    end
+})
+
+==============================
+FIM DO ARQUIVO
+==============================
